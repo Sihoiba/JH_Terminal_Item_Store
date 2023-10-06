@@ -82,9 +82,19 @@ register_blueprint "terminal_send_equipment"
                     end
                 else                                
                     if postbag and postbag.data and postbag.data.used_space ~= postbag.data.max_space then
-                        nova.log("storing "..param.text.name)                        
+                        nova.log("storing "..param.text.name)
+						if param.armor and param.health then
+							if not param.data then
+								param.data = {}
+							end
+							if not param.armor.permanent then
+								param.data.not_permanent = true
+								param.armor.permanent = true
+							end
+							param.data.stored_health = param.health.current
+						end
                         level:drop_item( who, param )
-                        level:hard_place_entity( param, ivec2( 0,0 ) )
+                        level:hard_place_entity( param, ivec2( 0,0 ) )						
                         level:pickup( postbag, param, false )
                         postbag.data.used_space = postbag.data.used_space + 1   
                     end 
@@ -126,11 +136,18 @@ register_blueprint "station_retrieve_equipment"
                 else
                     if postbag and postbag.data and postbag.data.used_space > 0 then
                         nova.log("retrieving "..param.text.name)
+						if param.armor and param.data and param.data.stored_health and param.health then
+							nova.log("armor health "..param.health.current)
+							param.health.current = param.data.stored_health
+							if param.data.not_permanent then
+								param.data.permanent = false
+							end
+						end
                         local parent = self:parent()
                         local pattr  = parent.attributes
                         pattr.charges = pattr.charges - 1
                         level:pickup_drop( who, param, true )
-                        postbag.data.used_space = postbag.data.used_space -     1                   
+                        postbag.data.used_space = postbag.data.used_space - 1                   
                         return 100
                     end
                 end
@@ -148,7 +165,8 @@ register_blueprint "hidden_entity_postbag"
         equipment = {
             count = 3
         }
-    }
+    },
+	attributes = {}
 }
 
 postal_service = {}
