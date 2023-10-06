@@ -1,5 +1,5 @@
 meta = {
-  id            = "Terminal_Item_Store",
+  id            = "Jovisec_Postal_Service",
   save_version  = 100,
   save_agnostic = false,
 }

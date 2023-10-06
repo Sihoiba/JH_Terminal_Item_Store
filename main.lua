@@ -21,7 +21,7 @@ function mod.run_store_equipment_ui( self, entity, return_entity )
         target = return_entity or self,
         cancel = true,
     })
-    list.title = (postbag_entity.data.max_space - postbag_entity.data.used_space).." spaces remaining."
+    list.title = (postbag_entity.data.max_space - postbag_entity.data.used_space).." spaces remaining"
     list.size  = coord( math.max( 30, max_len + 6 ), 0 )
     list.confirm = "Are you sure you want to send this equipment?"
     ui:terminal( entity, nil, list )
@@ -97,7 +97,7 @@ function mod.run_retrieve_ui( self, entity, return_entity )
         target = return_entity or self,
         cancel = true,
     })
-    list.title = "Retrieve sent equipment or item."
+    list.title = "Retrieve sent equipment"
     list.size  = coord( math.max( 30, max_len + 6 ), 0 )
     list.confirm = "Are you sure you want to retrieve this?"
     ui:terminal( entity, nil, list )
@@ -107,7 +107,7 @@ register_blueprint "terminal_send_equipment"
 {
     text = {
         entry = "Send equipment",
-        desc  = "Send an equipment to retrieve at a later station. Max 3 sent and awaiting collection.",
+        desc  = "JoviSec Delivery Module 0.6.6\nSend equipment to retrieve later at stations. Max 3 out for delivery.",		
     },
     data = {
         terminal = {
@@ -132,7 +132,7 @@ register_blueprint "terminal_send_equipment"
                         nova.log("storing "..param.text.name)                        
                         level:drop_item( who, param )
                         level:hard_place_entity( param, ivec2( 0,0 ) )
-                        level:pickup_drop( postbag, param, false )
+                        level:pickup( postbag, param, false )
                         postbag.data.used_space = postbag.data.used_space + 1   
                     end 
                 
@@ -187,7 +187,7 @@ register_blueprint "station_retrieve_equipment"
 {
     text = {
         entry = "Retrieve sent equipment",
-        desc  = "Retrieve an equipment previously sent to yourself.",
+        desc  = "JoviSec Delivery Module 0.6.6\nRetrieve an equipment previously sent to yourself.",
     },
     data = {
         terminal = {
@@ -229,7 +229,6 @@ register_blueprint "station_retrieve_equipment"
 register_blueprint "hidden_entity_postbag" 
 {
     flags = { EF_NOPICKUP },
-    inventory = {},
     data = {
         max_space = 3,
         used_space = 0,
@@ -246,23 +245,23 @@ function postal_service.on_entity( entity )
 		nova.log("Attaching postbag to player")
         entity:attach( "hidden_entity_postbag" )
     end 
-    if (entity:get_name() == "terminal" or entity:get_name() == "test terminal") then
+    if (world:get_id(entity) == "terminal" or world:get_id(entity) == "trial_arena_terminal") then
 		nova.log("Attaching send to terminal")
-        entity:attach( "terminal_send_equipment" )     
+        entity:attach( "terminal_send_equipment" )
     end
-    if (entity.get_name() == "medical station") then
+    if (world:get_id(entity) == "medical_station") then
 		nova.log("Attaching retrieve medical")
         entity:attach( "station_retrieve_equipment" )
     end
-	if (entity:get_name() == "ammo station") then
+	if (world:get_id(entity) == "terminal_ammo") then
 		nova.log("Attaching retrieve ammo")
         entity:attach( "station_retrieve_equipment" )
     end
-	if (entity.get_name() == "manufacture station") then
+	if (world:get_id(entity) == "manufacture_station") then
 		nova.log("Attaching retrieve manufacture")
         entity:attach( "station_retrieve_equipment" )
     end
-	if (entity.get_name() == "technical station") then
+	if (world:get_id(entity) == "technical_station") then
 		nova.log("Attaching retrieve technical")
         entity:attach( "station_retrieve_equipment" )
     end
