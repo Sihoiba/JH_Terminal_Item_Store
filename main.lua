@@ -50,16 +50,17 @@ function mod.run_retrieve_ui( self, entity, return_entity )
     local max_len       = 1
     local postbag_entity = get_postbag()
 
-    for c in postbag_entity:children() do
-        if c.flags and c.flags.data[ EF_ITEM ] then
-            nova.log(c:get_name())
-            max_len = math.max( max_len, string.len( c:get_name() ) )
-            table.insert( list, {
-                name = c:get_name(),
-                target = self,
-                parameter = c,
-                confirm = true,
-            })
+    for b in postbag_entity:children() do
+        for c in b:children() do
+            if c.flags and c.flags.data[ EF_ITEM ] then
+                max_len = math.max( max_len, string.len( c:get_name() ) )
+                table.insert( list, {
+                    name = c:get_name(),
+                    target = self,
+                    parameter = c,
+                    confirm = true,
+                })
+            end
         end
     end           
     
@@ -112,8 +113,14 @@ register_blueprint "terminal_send_equipment"
                             param.data.stored_health = param.health.current
                         end
                         level:drop_item( who, param )
-                        level:hard_place_entity( param, ivec2( 0,0 ) )                      
-                        level:pickup( postbag, param, false )
+                        level:hard_place_entity( param, ivec2( 0,0 ) )
+                        for c in ecs:children( postbag ) do                         
+                            if c.data and c.data.empty then                             
+                                c.data.empty = false
+                                level:pickup( c, param, false )
+                                break
+                            end
+                        end                        
                         postbag.data.used_space = postbag.data.used_space + 1   
                     end 
                 
@@ -155,7 +162,6 @@ register_blueprint "station_retrieve_equipment"
                     if postbag and postbag.data and postbag.data.used_space > 0 then
                         nova.log("retrieving "..param.text.name)
                         if param.armor and param.data and param.data.stored_health and param.health then
-                            nova.log("armor health "..param.health.current)
                             param.health.current = param.data.stored_health
                             if param.data.not_permanent then
                                 param.data.permanent = false
@@ -164,7 +170,9 @@ register_blueprint "station_retrieve_equipment"
                         local parent = self:parent()
                         local pattr  = parent.attributes
                         pattr.charges = pattr.charges - 1
-                        level:pickup_drop( who, param, true )
+                        local param_parent = param:parent()
+                        param_parent.data.empty = true          
+                        level:pickup_drop( who, param, true )                       
                         postbag.data.used_space = postbag.data.used_space - 1                   
                         return 100
                     end
@@ -174,17 +182,32 @@ register_blueprint "station_retrieve_equipment"
     }, 
 }
 
+register_blueprint "hidden_entity_sub_postbag" 
+{
+    flags = { EF_NOPICKUP },
+    data = {
+        empty = true
+    }
+}
+
 register_blueprint "hidden_entity_postbag" 
 {
     flags = { EF_NOPICKUP },
     data = {
         max_space = 3,
-        used_space = 0,
+        used_space = 0,     
         equipment = {
             count = 3
         }
     },
     callbacks = {
+        on_create = [[
+            function( self )
+                self:attach("hidden_entity_sub_postbag")
+                self:attach("hidden_entity_sub_postbag")
+                self:attach("hidden_entity_sub_postbag")
+            end
+        ]],
         on_pre_command = [[
             function(self, first)
                 if self:parent() == world:get_player() then
