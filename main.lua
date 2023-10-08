@@ -1,16 +1,16 @@
 function get_postbag() 
-	local lvl = world:get_level()
+    local lvl = world:get_level()
     for e in lvl:entities() do        
         if world:get_id(e) == "hidden_entity_postbag" then
-			return e
-		end
-	end
+            return e
+        end
+    end
 end
 
 function postman(self, target)
     local postbag = get_postbag()    
     if postbag then
-		nova.log("Pick up post bag")
+        nova.log("Pick up post bag")
         world:get_player():pickup(postbag)
     end    
     return postal_service.old_next_level( self,target )
@@ -78,7 +78,7 @@ register_blueprint "terminal_send_equipment"
 {
     text = {
         entry = "Send equipment",
-        desc  = "JoviSec Delivery Module 0.6.6\nSend equipment to retrieve later at stations. Max 3 out for delivery.",		
+        desc  = "JoviSec Delivery Module 0.6.6\nSend equipment to retrieve later at stations. Max 3 out for delivery.",     
     },
     data = {
         terminal = {
@@ -101,18 +101,18 @@ register_blueprint "terminal_send_equipment"
                 else                                
                     if postbag and postbag.data and postbag.data.used_space ~= postbag.data.max_space then
                         nova.log("storing "..param.text.name)
-						if param.armor and param.health then
-							if not param.data then
-								param.data = {}
-							end
-							if not param.armor.permanent then
-								param.data.not_permanent = true
-								param.armor.permanent = true
-							end
-							param.data.stored_health = param.health.current
-						end
+                        if param.armor and param.health then
+                            if not param.data then
+                                param.data = {}
+                            end
+                            if not param.armor.permanent then
+                                param.data.not_permanent = true
+                                param.armor.permanent = true
+                            end
+                            param.data.stored_health = param.health.current
+                        end
                         level:drop_item( who, param )
-                        level:hard_place_entity( param, ivec2( 0,0 ) )						
+                        level:hard_place_entity( param, ivec2( 0,0 ) )                      
                         level:pickup( postbag, param, false )
                         postbag.data.used_space = postbag.data.used_space + 1   
                     end 
@@ -154,13 +154,13 @@ register_blueprint "station_retrieve_equipment"
                 else
                     if postbag and postbag.data and postbag.data.used_space > 0 then
                         nova.log("retrieving "..param.text.name)
-						if param.armor and param.data and param.data.stored_health and param.health then
-							nova.log("armor health "..param.health.current)
-							param.health.current = param.data.stored_health
-							if param.data.not_permanent then
-								param.data.permanent = false
-							end
-						end
+                        if param.armor and param.data and param.data.stored_health and param.health then
+                            nova.log("armor health "..param.health.current)
+                            param.health.current = param.data.stored_health
+                            if param.data.not_permanent then
+                                param.data.permanent = false
+                            end
+                        end
                         local parent = self:parent()
                         local pattr  = parent.attributes
                         pattr.charges = pattr.charges - 1
@@ -184,45 +184,45 @@ register_blueprint "hidden_entity_postbag"
             count = 3
         }
     },
-	callbacks = {
+    callbacks = {
         on_pre_command = [[
             function(self, first)
-				if self:parent() == world:get_player() then
-					nova.log("Drop post bag - precommand")
-					world:get_level():drop_item( world:get_player(), self)
-					world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
-				end	
+                if self:parent() == world:get_player() then
+                    nova.log("Drop post bag - precommand")
+                    world:get_level():drop_item( world:get_player(), self)
+                    world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
+                end 
             end
         ]],
-		can_pick_trait = [[
-			function( self, player, trait_id )
-				if self:parent() == player then
-					nova.log("Drop post bag - precommand")
-					world:get_level():drop_item( player, self)
-					world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
-				end
-			end	
-		]],
-		on_aim = [[
-			function( self, entity, target, weapon )
-				if self:parent() == world:get_player() then
-					nova.log("Drop post bag - precommand")
-					world:get_level():drop_item( world:get_player(), self)
-					world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
-				end
-			end	
-		]],
+        can_pick_trait = [[
+            function( self, player, trait_id )
+                if self:parent() == player then
+                    nova.log("Drop post bag - precommand")
+                    world:get_level():drop_item( player, self)
+                    world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
+                end
+            end 
+        ]],
+        on_aim = [[
+            function( self, entity, target, weapon )
+                if self:parent() == world:get_player() then
+                    nova.log("Drop post bag - precommand")
+                    world:get_level():drop_item( world:get_player(), self)
+                    world:get_level():hard_place_entity( self, ivec2( 0,0 ) )
+                end
+            end 
+        ]],
     }
 }
 
 register_blueprint "runtime_postman"
 {
-	flags = { EF_NOPICKUP },
-	callbacks = {
-		on_load = [=[
+    flags = { EF_NOPICKUP },
+    callbacks = {
+        on_load = [=[
             function ( self )
                 if world.next_level ~= postman then
-					nova.log("on_load replaced")
+                    nova.log("on_load replaced")
                     postal_service.old_next_level = world.next_level
                     world.next_level = postman
                 end
@@ -232,24 +232,24 @@ register_blueprint "runtime_postman"
         on_enter_level = [=[
             function ( self, entity, reenter )
                 if world.next_level ~= postman then
-					nova.log("on_enter_level replaced")
+                    nova.log("on_enter_level replaced")
                     postal_service.old_next_level = world.next_level
                     world.next_level = postman
                 end
             end
         
         ]=],
-	}
+    }
 }
 
 postal_service = {
-	old_next_level = nil
+    old_next_level = nil
 }
-function postal_service.on_entity( entity )	
+function postal_service.on_entity( entity ) 
     if entity.data and entity.data.ai and entity.data.ai.group == "player" then
-		nova.log("Postbag and postman is attached to the player")
+        nova.log("Postbag and postman is attached to the player")
         entity:attach( "hidden_entity_postbag" )
-		entity:attach( "runtime_postman" )
+        entity:attach( "runtime_postman" )
     end 
     if (world:get_id(entity) == "terminal" or world:get_id(entity) == "trial_arena_terminal") then
         entity:attach( "terminal_send_equipment" )
@@ -257,13 +257,13 @@ function postal_service.on_entity( entity )
     if (world:get_id(entity) == "medical_station") then
         entity:attach( "station_retrieve_equipment" )
     end
-	if (world:get_id(entity) == "terminal_ammo") then
+    if (world:get_id(entity) == "terminal_ammo") then
         entity:attach( "station_retrieve_equipment" )
     end
-	if (world:get_id(entity) == "manufacture_station") then
+    if (world:get_id(entity) == "manufacture_station") then
         entity:attach( "station_retrieve_equipment" )
     end
-	if (world:get_id(entity) == "technical_station") then
+    if (world:get_id(entity) == "technical_station") then
         entity:attach( "station_retrieve_equipment" )
     end
 end
