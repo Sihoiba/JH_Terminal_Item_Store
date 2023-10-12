@@ -5,6 +5,7 @@ function get_postbag()
             return e
         end
     end
+	nova.log("ERROR - Postbag has gone missing!")
 end
 
 function postman(self, target)
