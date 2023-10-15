@@ -9,7 +9,7 @@ end
 
 function mod.run_store_equipment_ui( self, entity, return_entity )
     local list          = {}
-    local slots         = { "1", "2", "3", "4", "armor", "head", "utility" }
+    local slots         = { "1", "2", "3", "4", "armor", "head" }
     local max_len       = 1
     local postbag_entity = get_postbag()
     for _,slot_id in ipairs( slots ) do
@@ -213,7 +213,7 @@ register_blueprint "terminal_send_equipment"
                                 end
                             end
                         end
-
+                        
                         level:drop_item( who, param )
                         level:hard_place_entity( param, ivec2( 0,0 ) )
 
