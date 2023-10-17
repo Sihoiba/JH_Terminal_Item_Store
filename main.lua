@@ -215,10 +215,10 @@ register_blueprint "terminal_send_equipment"
                         
                         level:drop_item( who, param )
                         level:hard_place_entity( param, ivec2( 0,0 ) )
-						
-						
+                        
+                        
                         nova.log("after_experience_mult param"..param:attribute("experience_mult"))
-						nova.log("after_experience_mult who"..who:attribute("experience_mult"))
+                        nova.log("after_experience_mult who"..who:attribute("experience_mult"))
 
                         local after_acid_resist = who:attribute("resist", "acid")
                         local after_adrenaline_bonus = who:attribute("adrenaline_bonus")
@@ -252,109 +252,144 @@ register_blueprint "terminal_send_equipment"
                                 c.data.empty = false
                                 level:pickup( c, param, false )
 
-                                if after_acid_resist ~= before_acid_resist then
-                                    c.attributes["acid.resist"] = after_acid_resist - before_acid_resist
+                                if not param.weapon then                                    
+                                    if after_acid_resist ~= before_acid_resist then
+                                        nova.log("Acid "..after_acid_resist.." - "..before_acid_resist.." = "..(after_acid_resist - before_acid_resist))
+                                        c.attributes["acid.resist"] = after_acid_resist - before_acid_resist
+                                    end
+                                    if after_adrenaline_bonus ~= before_adrenaline_bonus then
+                                        nova.log("Adrenaline bonus "..after_adrenaline_bonus.." - "..before_adrenaline_bonus.." = "..(after_adrenaline_bonus - before_adrenaline_bonus))
+                                        c.attributes.adrenaline_bonus = after_adrenaline_bonus - before_adrenaline_bonus
+                                    end
+                                    if after_aim_bonus ~= before_aim_bonus then
+                                        nova.log("Aim "..after_aim_bonus.." - "..before_aim_bonus.." = "..(after_aim_bonus - before_aim_bonus))
+                                        c.attributes.aim_bonus = after_aim_bonus - before_aim_bonus
+                                    end
+                                    if after_bleed_resist ~= before_bleed_resist then
+                                        nova.log("Bleed "..after_bleed_resist.." - "..before_bleed_resist.." = "..(after_bleed_resist - before_bleed_resist))
+                                        c.attributes["bleed.resist"] = after_bleed_resist - before_bleed_resist
+                                    end
+                                    if after_cold_resist ~= before_cold_resist then
+                                        nova.log("Cold "..after_cold_resist.." - "..before_cold_resist.." = "..(after_cold_resist - before_cold_resist))
+                                        c.attributes["cold.resist"] = after_cold_resist - before_cold_resist
+                                    end
+                                    if after_crit_chance ~= before_crit_chance then
+                                        nova.log("Crit chance "..after_crit_chance.." - "..before_crit_chance.." = "..(after_crit_chance - before_crit_chance))
+                                        c.attributes.crit_chance = after_crit_chance - before_crit_chance
+                                    end
+                                    if after_crit_damage ~= before_crit_damage then
+                                        nova.log("Crit damage "..after_crit_damage.." - "..before_crit_damage.." = "..(after_crit_damage - before_crit_damage))
+                                        c.attributes.crit_damage = after_crit_damage - before_crit_damage
+                                    end
+                                    if after_crit_defence ~= before_crit_defence then
+                                        nova.log("Crit defence "..after_crit_defence.." - "..before_crit_defence.." = "..(after_crit_defence - before_crit_defence))
+                                        c.attributes.crit_defence = after_crit_defence - before_crit_defence
+                                    end
+                                    if after_dodge_max ~= before_dodge_max then
+                                        nova.log("Dodge max "..after_dodge_max.." - "..before_dodge_max.." = "..(after_dodge_max - before_dodge_max))
+                                        c.attributes.dodge_max = after_dodge_max - before_dodge_max
+                                    end
+                                    if after_dodge_value ~= before_dodge_value then
+                                        nova.log("Dodge "..after_dodge_value.." - "..before_dodge_value.." = "..(after_dodge_value - before_dodge_value))
+                                        c.attributes.dodge_value = after_dodge_value - before_dodge_value
+                                    end
+                                    if after_energy_bonus ~= before_energy_bonus then
+                                        nova.log("Energy bonus "..after_energy_bonus.." - "..before_energy_bonus.." = "..(after_energy_bonus - before_energy_bonus))
+                                        c.attributes.energy_bonus = after_energy_bonus - before_energy_bonus
+                                    end
+                                    if before_experience_mult and before_experience_mult > 0 then
+                                        nova.log("Experience mult 1.0/"..before_experience_mult.." = "..(1.0/before_experience_mult))
+                                        c.attributes.experience_mult = 1.0/before_experience_mult
+                                    end
+                                    if after_fury_bonus ~= before_fury_bonus then
+                                        nova.log("Fury bonus "..after_fury_bonus.." - "..before_fury_bonus.." = "..(after_fury_bonus - before_fury_bonus))
+                                        c.attributes.fury_bonus = after_fury_bonus - before_fury_bonus
+                                    end
+                                    if after_hacking ~= before_hacking then
+                                        nova.log("Hacking "..after_hacking.." - "..before_hacking.." = "..(after_hacking - before_hacking))
+                                        c.attributes.hacking = after_hacking - before_hacking
+                                    end
+                                    if after_ignite_resist ~= before_ignite_resist then
+                                        nova.log("Ignite resist "..after_ignite_resist.." - "..before_ignite_resist.." = "..(after_ignite_resist - before_ignite_resist))
+                                        c.attributes["ignite.resist"] = after_ignite_resist - before_ignite_resist
+                                    end
+                                    if after_inv_capacity ~= before_inv_capacity then
+                                        nova.log("Inv slots "..after_inv_capacity.." - "..before_inv_capacity.." = "..(after_inv_capacity - before_inv_capacity))
+                                        c.attributes.inv_capacity = after_inv_capacity - before_inv_capacity
+                                    end
+                                    if after_max_distance ~= before_max_distance then
+                                        nova.log("Max dist "..after_max_distance.." - "..before_max_distance.." = "..(after_max_distance - before_max_distance))
+                                        c.attributes.max_distance = after_max_distance - before_max_distance
+                                    end
+                                    if before_medkit_mod and before_medkit_mod > 0 then
+                                        nova.log("Medkit mod 1.0/"..before_medkit_mod.." = "..(1.0/before_medkit_mod))
+                                        c.attributes.medkit_mod = 1.0/before_medkit_mod
+                                    end
+                                    if before_melee_guard_mod and before_melee_guard_mod > 0 then
+                                        nova.log("Melee guard mod 1.0/"..before_melee_guard_mod.." = "..(1.0/before_melee_guard_mod))
+                                        c.attributes.melee_guard_mod = 1.0/before_melee_guard_mod
+                                    end
+                                    if after_melee_resist ~= before_melee_resist then
+                                        nova.log("Melee resist "..after_melee_resist.." - "..before_melee_resist.." = "..(after_melee_resist - before_melee_resist))
+                                        c.attributes["melee.resist"] = after_melee_resist - before_melee_resist
+                                    end
+                                    if after_min_vision ~= before_min_vision then
+                                        nova.log("Min vision "..after_min_vision.." - "..before_min_vision.." = "..(after_min_vision - before_min_vision))
+                                        c.attributes.min_vision = after_min_vision - before_min_vision
+                                    end
+                                    if before_move_time and before_move_time > 0 then
+                                        nova.log("Move time 1.0/"..before_move_time.." = "..(1.0/before_move_time))
+                                        c.attributes.move_time = 1.0/before_move_time
+                                    end
+                                    if before_multikit_mod and before_multikit_mod > 0 then
+                                        nova.log("Multikit mod 1.0/"..before_multikit_mod.." = "..(1.0/before_multikit_mod))
+                                        c.attributes.multikit_mod = 1.0/before_multikit_mod
+                                    end
+                                    if after_opt_distance ~= before_opt_distance then
+                                        nova.log("Opt distance "..after_opt_distance.." - "..before_opt_distance.." = "..(after_opt_distance - before_opt_distance))
+                                        c.attributes.opt_distance = after_opt_distance - before_opt_distance
+                                    end
+                                    if after_pain_reduction ~= before_pain_reduction then
+                                        nova.log("Pain reduction "..after_pain_reduction.." - "..before_pain_reduction.." = "..(after_pain_reduction - before_pain_reduction))
+                                        c.attributes.pain_reduction = after_pain_reduction - before_pain_reduction
+                                    end
+                                    if after_power_bonus ~= before_power_bonus then
+                                        nova.log("Power bonus "..after_power_bonus.." - "..before_power_bonus.." = "..(after_power_bonus - before_power_bonus))
+                                        c.attributes.power_bonus = after_power_bonus - before_power_bonus
+                                    end
+                                    if after_smoke_range_bonus ~= before_smoke_range_bonus then
+                                        nova.log("Smoke bonus "..after_smoke_range_bonus.." - "..before_smoke_range_bonus.." = "..(after_smoke_range_bonus - before_smoke_range_bonus))
+                                        c.attributes.smoke_range_bonus = after_smoke_range_bonus - before_smoke_range_bonus
+                                    end
+                                    if before_speed and before_speed > 0 then
+                                        nova.log("Speed 1.0/"..before_speed.." = "..(1.0/before_speed))
+                                        c.attributes.speed = 1.0/before_speed
+                                    end
+                                    if before_splash_mod and before_splash_mod > 0 then
+                                        nova.log("Splash resist 1.0/"..before_splash_mod.." = "..(1.0/before_splash_mod))
+                                        c.attributes.splash_mod = 1.0/before_splash_mod
+                                    end
+                                    if after_stealth_duration_bonus ~= before_stealth_duration_bonus then
+                                        nova.log("Stealth duration bonus "..after_stealth_duration_bonus.." - "..before_stealth_duration_bonus.." = "..(after_stealth_duration_bonus - before_stealth_duration_bonus))
+                                        c.attributes.stealth_duration_bonus = after_stealth_duration_bonus - before_stealth_duration_bonus
+                                    end
+                                    if after_stealth_shot_bonus ~= before_stealth_shot_bonus then
+                                        nova.log("Stealth shot bonus "..after_stealth_shot_bonus.." - "..before_stealth_shot_bonus.." = "..(after_stealth_shot_bonus - before_stealth_shot_bonus))
+                                        c.attributes.stealth_shot_bonus = after_stealth_shot_bonus - before_stealth_shot_bonus
+                                    end
+                                    if after_tenacity_bonus ~= before_tenacity_bonus then
+                                        nova.log("Tenacity bonus "..after_tenacity_bonus.." - "..before_tenacity_bonus.." = "..(after_tenacity_bonus - before_tenacity_bonus))
+                                        c.attributes.tenacity_bonus = after_tenacity_bonus - before_tenacity_bonus
+                                    end
+                                    if after_toxin_resist ~= before_toxin_resist then
+                                        nova.log("Toxin "..after_toxin_resist.." - "..before_toxin_resist.." = "..(after_toxin_resist - before_toxin_resist))
+                                        c.attributes["toxin.resist"] = after_toxin_resist - before_toxin_resist
+                                    end
+                                    if before_use_time and before_use_time > 0 then
+                                        nova.log("Use time 1.0/"..before_use_time.." = "..(1.0/before_use_time))
+                                        c.attributes.use_time = 1.0/before_use_time
+                                    end
                                 end
-                                if after_adrenaline_bonus ~= before_adrenaline_bonus then
-                                    c.attributes.adrenaline_bonus = after_adrenaline_bonus - before_adrenaline_bonus
-                                end
-                                if after_aim_bonus ~= before_aim_bonus then
-                                    c.attributes.aim_bonus = after_aim_bonus - before_aim_bonus
-                                end
-                                if after_bleed_resist ~= before_bleed_resist then
-                                    c.attributes["bleed.resist"] = after_bleed_resist - before_bleed_resist
-                                end
-                                if after_cold_resist ~= before_cold_resist then
-                                    c.attributes["cold.resist"] = after_cold_resist - before_cold_resist
-                                end
-                                if after_crit_chance ~= before_crit_chance then
-                                    c.attributes.crit_chance = after_crit_chance - before_crit_chance
-                                end
-                                if after_crit_damage ~= before_crit_damage then
-                                    c.attributes.crit_damage = after_crit_damage - before_crit_damage
-                                end
-                                if after_crit_defence ~= before_crit_defence then
-                                    c.attributes.crit_defence = after_crit_defence - before_crit_defence
-                                end
-                                if after_dodge_max ~= before_dodge_max then
-                                    c.attributes.dodge_max = after_dodge_max - before_dodge_max
-                                end
-                                if after_dodge_value ~= before_dodge_value then
-                                    c.attributes.dodge_value = after_dodge_value - before_dodge_value
-                                end
-                                if after_energy_bonus ~= before_energy_bonus then
-                                    c.attributes.energy_bonus = after_energy_bonus - before_energy_bonus
-                                end
-                                if before_experience_mult and before_experience_mult > 0 then
-                                    c.attributes.experience_mult = 1.0/before_experience_mult
-                                end
-                                if after_fury_bonus ~= before_fury_bonus then
-                                    c.attributes.fury_bonus = after_fury_bonus - before_fury_bonus
-                                end
-                                if after_hacking ~= before_hacking then
-                                    c.attributes.hacking = after_hacking - before_hacking
-                                end
-                                if after_ignite_resist ~= before_ignite_resist then
-                                    c.attributes["ignite.resist"] = after_ignite_resist - before_ignite_resist
-                                end
-                                if after_inv_capacity ~= before_inv_capacity then
-                                    c.attributes.inv_capacity = after_inv_capacity - before_inv_capacity
-                                end
-                                if after_max_distance ~= before_max_distance then
-                                    c.attributes.max_distance = after_max_distance - before_max_distance
-                                end
-                                if before_medkit_mod and before_medkit_mod > 0 then
-                                    c.attributes.medkit_mod = 1.0/before_medkit_mod
-                                end
-                                if before_melee_guard_mod and before_melee_guard_mod > 0 then
-                                    c.attributes.melee_guard_mod = 1.0/before_melee_guard_mod
-                                end
-                                if after_melee_resist ~= before_melee_resist then
-                                    c.attributes["melee.resist"] = after_melee_resist - before_melee_resist
-                                end
-                                if after_min_vision ~= before_min_vision then
-                                    c.attributes.min_vision = after_min_vision - before_min_vision
-                                end
-                                if before_move_time and before_move_time > 0 then
-                                    c.attributes.move_time = 1.0/before_move_time
-                                end
-                                if before_multikit_mod and before_multikit_mod > 0 then
-                                    c.attributes.multikit_mod = 1.0/before_multikit_mod
-                                end
-                                if after_opt_distance ~= before_opt_distance then
-                                    c.attributes.opt_distance = after_opt_distance - before_opt_distance
-                                end
-                                if after_pain_reduction ~= before_pain_reduction then
-                                    c.attributes.pain_reduction = after_pain_reduction - before_pain_reduction
-                                end
-                                if after_power_bonus ~= before_power_bonus then
-                                    c.attributes.power_bonus = after_power_bonus - before_power_bonus
-                                end
-                                if after_smoke_range_bonus ~= before_smoke_range_bonus then
-                                    c.attributes.smoke_range_bonus = after_smoke_range_bonus - before_smoke_range_bonus
-                                end
-                                if before_speed and before_speed > 0 then
-                                    c.attributes.speed = 1.0/before_speed
-                                end
-                                if before_splash_mod and before_splash_mod > 0 then
-                                    c.attributes.splash_mod = 1.0/before_splash_mod
-                                end
-                                if after_stealth_duration_bonus ~= before_stealth_duration_bonus then
-                                    c.attributes.stealth_duration_bonus = after_stealth_duration_bonus - before_stealth_duration_bonus
-                                end
-                                if after_stealth_shot_bonus ~= before_adrenaline_bonus then
-                                    c.attributes.stealth_shot_bonus = after_stealth_shot_bonus - before_stealth_shot_bonus
-                                end
-                                if after_tenacity_bonus ~= before_tenacity_bonus then
-                                    c.attributes.tenacity_bonus = after_tenacity_bonus - before_tenacity_bonus
-                                end
-                                if after_toxin_resist ~= before_toxin_resist then
-                                    c.attributes["toxin.resist"] = after_toxin_resist - before_toxin_resist
-                                end
-                                if before_use_time and before_use_time > 0 then
-                                    c.attributes.use_time = 1.0/before_use_time
-                                end
-
                                 break
                             end
                         end
