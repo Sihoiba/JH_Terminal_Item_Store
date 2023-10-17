@@ -120,8 +120,7 @@ register_blueprint "terminal_send_equipment"
                         local before_dodge_value = who:attribute("dodge_value")
                         local before_energy_bonus = who:attribute("energy_bonus")
                         local before_experience_mult = param:attribute("experience_mult")
-                        nova.log("before_experience_mult"..before_experience_mult)
-                        if before_experience_mult and before_experience_mult == 0 then
+                        if before_experience_mult and before_experience_mult == 1 then
                             for c in ecs:children( param ) do
                                 if c.attributes and c.attributes.experience_mult then
                                     nova.log(c:get_name()..c.attributes.experience_mult)
@@ -182,7 +181,7 @@ register_blueprint "terminal_send_equipment"
                         local before_smoke_range_bonus = who:attribute("smoke_range_bonus")
                         local before_speed = param:attribute("speed")
                         nova.log("before_speed"..before_speed)
-                        if before_speed and before_speed == 0 then
+                        if before_speed and before_speed == 1 then
                             for c in ecs:children( param ) do
                                 if c.attributes and c.attributes.speed then
                                     nova.log(c:get_name()..c.attributes.speed)
@@ -216,6 +215,10 @@ register_blueprint "terminal_send_equipment"
                         
                         level:drop_item( who, param )
                         level:hard_place_entity( param, ivec2( 0,0 ) )
+						
+						
+                        nova.log("after_experience_mult param"..param:attribute("experience_mult"))
+						nova.log("after_experience_mult who"..who:attribute("experience_mult"))
 
                         local after_acid_resist = who:attribute("resist", "acid")
                         local after_adrenaline_bonus = who:attribute("adrenaline_bonus")
