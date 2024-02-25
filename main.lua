@@ -24,6 +24,20 @@ function mod.run_store_equipment_ui( self, entity, return_entity )
                 })
         end
     end
+				
+	for e in entity:items() do
+		nova.log("Inserting inventory items")
+		if e.flags.data[EF_ITEM] == true and e.flags.data[EF_CONSUMABLE] == true then
+			nova.log("Inventory item "..tostring(e.text.name))
+			max_len = math.max( max_len, string.len( e:get_name() ) )
+			table.insert( list, {
+				name = e:get_name(),
+				target = self,
+				parameter = e,
+				confirm = true,
+			})
+		end
+	end
 
     table.insert( list, {
         name = ui:text("ui.lua.common.cancel"),
@@ -32,7 +46,7 @@ function mod.run_store_equipment_ui( self, entity, return_entity )
     })
     list.title = (postbag_entity.data.max_space - postbag_entity.data.used_space).." spaces remaining"
     list.size  = coord( math.max( 30, max_len + 6 ), 0 )
-    list.confirm = "Are you sure you want to send this equipment?"
+    list.confirm = "Are you sure you want to send this equipment or stack of items?"
     ui:terminal( entity, nil, list )
 end
 
@@ -60,7 +74,7 @@ function mod.run_retrieve_ui( self, entity, return_entity )
         target = return_entity or self,
         cancel = true,
     })
-    list.title = "Retrieve sent equipment"
+    list.title = "Retrieve sent items"
     list.size  = coord( math.max( 30, max_len + 6 ), 0 )
     list.confirm = "Are you sure you want to retrieve this?"
     ui:terminal( entity, nil, list )
@@ -69,8 +83,8 @@ end
 register_blueprint "terminal_send_equipment"
 {
     text = {
-        entry = "Send equipment",
-        desc  = "JoviSec Delivery Module 0.6.6\nSend equipment to retrieve later at stations. Max 3 out for delivery.",
+        entry = "Send items",
+        desc  = "JoviSec Delivery Module 0.6.6\nSend items to retrieve later at stations. Max 3 out for delivery.",
     },
     data = {
         terminal = {
@@ -407,8 +421,8 @@ register_blueprint "terminal_send_equipment"
 register_blueprint "station_retrieve_equipment"
 {
     text = {
-        entry = "Retrieve sent equipment",
-        desc  = "JoviSec Delivery Module 0.6.6\nRetrieve an equipment previously sent to yourself.",
+        entry = "Retrieve sent items",
+        desc  = "JoviSec Delivery Module 0.6.6\nRetrieve items previously sent to yourself.",
     },
     data = {
         terminal = {
