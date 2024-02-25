@@ -24,20 +24,20 @@ function mod.run_store_equipment_ui( self, entity, return_entity )
                 })
         end
     end
-				
-	for e in entity:items() do
-		nova.log("Inserting inventory items")
-		if e.flags.data[EF_ITEM] == true and e.flags.data[EF_CONSUMABLE] == true then
-			nova.log("Inventory item "..tostring(e.text.name))
-			max_len = math.max( max_len, string.len( e:get_name() ) )
-			table.insert( list, {
-				name = e:get_name(),
-				target = self,
-				parameter = e,
-				confirm = true,
-			})
-		end
-	end
+
+    for e in entity:items() do
+        nova.log("Inserting inventory items")
+        if e.flags.data[EF_ITEM] == true and e.flags.data[EF_CONSUMABLE] == true then
+            nova.log("Inventory item "..tostring(e.text.name))
+            max_len = math.max( max_len, string.len( e:get_name() ) )
+            table.insert( list, {
+                name = e:get_name(),
+                target = self,
+                parameter = e,
+                confirm = true,
+            })
+        end
+    end
 
     table.insert( list, {
         name = ui:text("ui.lua.common.cancel"),
@@ -226,11 +226,11 @@ register_blueprint "terminal_send_equipment"
                                 end
                             end
                         end
-                        
+
                         level:drop_item( who, param )
                         level:hard_place_entity( param, ivec2( 0,0 ) )
-                        
-                        
+
+
                         nova.log("after_experience_mult param"..param:attribute("experience_mult"))
                         nova.log("after_experience_mult who"..who:attribute("experience_mult"))
 
@@ -249,9 +249,9 @@ register_blueprint "terminal_send_equipment"
                         local after_hacking = who:attribute("hacking")
                         local after_ignite_resist = who:attribute("resist", "ignite")
                         local after_inv_capacity = who:attribute("inv_capacity")
-                        local after_max_distance = who:attribute("max_distance")                        
+                        local after_max_distance = who:attribute("max_distance")
                         local after_melee_resist = who:attribute("resist", "melee")
-                        local after_min_vision = who:attribute("min_vision")                        
+                        local after_min_vision = who:attribute("min_vision")
                         local after_opt_distance = who:attribute("opt_distance")
                         local after_pain_reduction = who:attribute("pain_reduction")
                         local after_power_bonus = who:attribute("power_bonus")
@@ -266,7 +266,7 @@ register_blueprint "terminal_send_equipment"
                                 c.data.empty = false
                                 level:pickup( c, param, false )
 
-                                if not param.weapon then                                    
+                                if not param.weapon then
                                     if after_acid_resist ~= before_acid_resist then
                                         nova.log("Acid "..after_acid_resist.." - "..before_acid_resist.." = "..(after_acid_resist - before_acid_resist))
                                         c.attributes["acid.resist"] = after_acid_resist - before_acid_resist
