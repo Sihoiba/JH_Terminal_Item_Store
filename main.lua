@@ -107,7 +107,7 @@ register_blueprint "terminal_send_equipment"
                 else
                     if postbag and postbag.data and postbag.data.used_space ~= postbag.data.max_space then
                         nova.log("storing "..param.text.name)
-                        if param.text.name == "Cybersuit" then
+                        if param:child("perk_au_cybersuit") then
                             ui:set_hint( "The Cybersuit doesn't come off!", 50, 1 )
                             return
                         end
